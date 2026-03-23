@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>קטלוג פונטים עבריים - Digitizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@300;400;700&family=Assistant:wght@300;400;700&family=Varela+Round&family=Secular+One&family=Alef:wght@400;700&family=Frank+Ruhl+Libre:wght@300;400;700&family=David+Libre:wght@400;700&family=Suez+One&family=Noto+Sans+Hebrew:wght@300;400;700&family=Noto+Serif+Hebrew:wght@300;400;700&family=Karantina:wght@300;400;700&family=Amatic+SC:wght@400;700&family=Bellefair&family=Miriam+Libre:wght@400;700&family=Tinos:wght@400;700&family=Cousine:wght@400;700&family=Arimo:wght@400;700&family=Ploni:wght@300;400;700&family=Rubik+Mono+One&family=IBM+Plex+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 300; src: url('greycliff-hebrew/GreycliffHebrewCF-Light.woff2') format('woff2'); }
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 500; src: url('greycliff-hebrew/GreycliffHebrewCF-Medium.woff2') format('woff2'); }
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 700; src: url('greycliff-hebrew/GreycliffHebrewCF-Bold.woff2') format('woff2'); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0a0b; color: #e5e5e5; font-family: 'Heebo', sans-serif; padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-family: 'GreycliffHebrewCF', sans-serif; font-size: 42px; font-weight: 700; margin-bottom: 10px; color: #4cd7f6; }
+  .subtitle { color: #888; font-size: 16px; margin-bottom: 40px; }
+  .categories { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+  .cat-btn { background: #1a1a1e; border: 1px solid #333; color: #aaa; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-family: 'Heebo', sans-serif; transition: all 0.2s; }
+  .cat-btn:hover, .cat-btn.active { background: #4cd7f6; color: #000; border-color: #4cd7f6; }
+  .section-title { font-size: 24px; font-weight: 700; color: #4cd7f6; margin: 40px 0 20px; padding-bottom: 10px; border-bottom: 1px solid #222; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+  .card { background: #141416; border: 1px solid #222; border-radius: 12px; padding: 24px; transition: border-color 0.3s; }
+  .card:hover { border-color: #4cd7f6; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .font-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .font-meta { font-size: 12px; color: #666; }
+  .font-style { font-size: 11px; color: #4cd7f6; background: #4cd7f615; padding: 3px 8px; border-radius: 8px; }
+  .font-source { font-size: 11px; color: #888; background: #ffffff08; padding: 3px 8px; border-radius: 8px; }
+  .preview { margin: 12px 0; line-height: 1.6; }
+  .preview-lg { font-size: 32px; color: #fff; margin-bottom: 8px; }
+  .preview-md { font-size: 18px; color: #ccc; margin-bottom: 4px; }
+  .preview-sm { font-size: 14px; color: #999; }
+  .license { font-size: 11px; color: #555; margin-top: 12px; }
+  .search { width: 100%; padding: 12px 20px; background: #141416; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 16px; font-family: 'Heebo', sans-serif; margin-bottom: 20px; }
+  .search:focus { outline: none; border-color: #4cd7f6; }
+  .search::placeholder { color: #555; }
+  .hidden { display: none !important; }
+  @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 28px; } }
+</style>
+</head>
+<body>
+
+<h1>קטלוג פונטים עבריים</h1>
+<p class="subtitle">37 פונטים חינמיים + פונטים בבעלות Digitizer | מעודכן מרץ 2026</p>
+
+<input type="text" class="search" placeholder="חיפוש פונט..." oninput="filterFonts(this.value)">
+
+<div class="categories">
+  <button class="cat-btn active" onclick="filterCat('all')">הכל</button>
+  <button class="cat-btn" onclick="filterCat('sans')">סנס-סריף</button>
+  <button class="cat-btn" onclick="filterCat('serif')">סריף</button>
+  <button class="cat-btn" onclick="filterCat('display')">דיספליי</button>
+  <button class="cat-btn" onclick="filterCat('hand')">כתב יד</button>
+  <button class="cat-btn" onclick="filterCat('mono')">מונוספייס</button>
+  <button class="cat-btn" onclick="filterCat('owned')">בבעלותנו</button>
+</div>
+
+<h2 class="section-title">בבעלות Digitizer</h2>
+<div class="grid">
+  <div class="card" data-cat="owned sans" data-name="GreycliffHebrewCF">
+    <div class="card-header">
+      <span class="font-name">GreycliffHebrewCF</span>
+      <span class="font-source">Digitizer</span>
+    </div>
+    <div class="preview">
+      <div class="preview-lg" style="font-family:'GreycliffHebrewCF'">דיגיטייזר - שותף טכני לצמיחה</div>
+      <div class="preview-md" style="font-family:'GreycliffHebrewCF'; font-weight:300">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
+      <div class="preview-sm" style="font-family:'GreycliffHebrewCF'">Light 300 | Medium 500 | Bold 700</div>
+    </div>
+    <div class="license">Commercial - Digitizer owned | woff + woff2</div>
+  </div>
+</div>
+
+<h2 class="section-title">Google Fonts (חינם, SIL OFL)</h2>
+<div class="grid" id="google-grid"></div>
+
+<h2 class="section-title">AlefAlefAlef (חינם)</h2>
+<div class="grid" id="aaa-grid"></div>
+
+<h2 class="section-title">מקורות נוספים</h2>
+<div class="grid" id="other-grid"></div>
+
+<script>
+const googleFonts = [
+  {name:"Heebo", family:"'Heebo'", cat:"sans", style:"סנס-סריף, מודרני", weights:"100-900"},
+  {name:"Rubik", family:"'Rubik'", cat:"sans", style:"סנס-סריף, מעוגל", weights:"300-900"},
+  {name:"Assistant", family:"'Assistant'", cat:"sans", style:"סנס-סריף, נקי", weights:"200-800"},
+  {name:"Varela Round", family:"'Varela Round'", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
+  {name:"Secular One", family:"'Secular One'", cat:"display", style:"דיספליי, בולט", weights:"400"},
+  {name:"Alef", family:"'Alef'", cat:"sans", style:"סנס-סריף, מאוזן", weights:"400, 700"},
+  {name:"Frank Ruhl Libre", family:"'Frank Ruhl Libre'", cat:"serif", style:"סריף, עיתונאי", weights:"300-900"},
+  {name:"David Libre", family:"'David Libre'", cat:"serif", style:"סריף, קלאסי", weights:"400-700"},
+  {name:"Suez One", family:"'Suez One'", cat:"display serif", style:"סריף, דיספליי", weights:"400"},
+  {name:"Noto Sans Hebrew", family:"'Noto Sans Hebrew'", cat:"sans", style:"סנס-סריף, אוניברסלי", weights:"100-900"},
+  {name:"Noto Serif Hebrew", family:"'Noto Serif Hebrew'", cat:"serif", style:"סריף, אוניברסלי", weights:"100-900"},
+  {name:"Karantina", family:"'Karantina'", cat:"display", style:"דיספליי, שובב", weights:"300-700"},
+  {name:"Amatic SC", family:"'Amatic SC'", cat:"hand display", style:"כתב יד, קז'ואל", weights:"400, 700"},
+  {name:"Bellefair", family:"'Bellefair'", cat:"serif", style:"סריף, אלגנטי", weights:"400"},
+  {name:"Miriam Libre", family:"'Miriam Libre'", cat:"sans", style:"סנס-סריף, ניטרלי", weights:"400, 700"},
+  {name:"Tinos", family:"'Tinos'", cat:"serif", style:"סריף, דמוי Times", weights:"400, 700"},
+  {name:"Cousine", family:"'Cousine'", cat:"mono", style:"מונוספייס", weights:"400, 700"},
+  {name:"Arimo", family:"'Arimo'", cat:"sans", style:"סנס-סריף, דמוי Arial", weights:"400-700"},
+  {name:"Ploni", family:"'Ploni'", cat:"sans", style:"סנס-סריף, מודרני", weights:"100-900"},
+  {name:"Rubik Mono One", family:"'Rubik Mono One'", cat:"display", style:"דיספליי, כבד", weights:"400"},
+  {name:"IBM Plex Sans Hebrew", family:"'IBM Plex Sans Hebrew'", cat:"sans", style:"סנס-סריף, תאגידי", weights:"300-700"},
+];
+
+const aaaFonts = [
+  {name:"Dana Yad", cat:"hand", style:"כתב יד, קליל וחינני"},
+  {name:"Gveret Levin", cat:"hand", style:"כתב יד, פופולרי מאוד"},
+  {name:"Maaravon", cat:"serif display", style:"סריף, רטרו מערבון"},
+  {name:"Noa Shalev", cat:"serif hand", style:"קליגרפי, ספרדי"},
+  {name:"Hug", cat:"display", style:"איורי, שובב"},
+  {name:"Heshbon", cat:"display", style:"גראנג', קבלות"},
+  {name:"Yarden", cat:"hand display", style:"מצויר ביד, לא פורמלי"},
+  {name:"Archai", cat:"display", style:"גיאומטרי, עתיק"},
+];
+
+const otherFonts = [
+  {name:"Frank Ruehl CLM", family:"serif", cat:"serif", style:"סריף, קלאסי", source:"Culmus Project", license:"GPL 2.0"},
+  {name:"Nachlieli CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף", source:"Culmus Project", license:"GPL+FE"},
+  {name:"David CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף", source:"Culmus Project", license:"GPL+FE"},
+  {name:"Hadasim CLM", family:"serif", cat:"serif", style:"סריף", source:"Culmus Project", license:"GPL+FE"},
+  {name:"Simple CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף, מינימלי", source:"Culmus Project", license:"GPL+FE"},
+  {name:"Ellinia CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף, דק", source:"Culmus Project", license:"GPL+FE"},
+  {name:"Aharoni CLM", family:"sans-serif", cat:"sans display", style:"סנס-סריף, בולד", source:"Culmus Project", license:"GPL+FE"},
+  {name:"Almoni", family:"sans-serif", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"Free"},
+];
+
+function renderCard(font, container, isGoogle=false) {
+  const family = font.family || `'${font.name}'`;
+  const fontStyle = isGoogle ? `font-family:${family}` : `font-family:${font.family || 'sans-serif'}`;
+  const source = isGoogle ? "Google Fonts" : (font.source || "AlefAlefAlef");
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.cat = font.cat;
+  card.dataset.name = font.name.toLowerCase();
+  card.innerHTML = `
+    <div class="card-header">
+      <span class="font-name">${font.name}</span>
+      <span class="font-source">${source}</span>
+    </div>
+    <div class="preview">
+      <div class="preview-lg" style="${fontStyle}">שלום עולם, דיגיטייזר</div>
+      <div class="preview-md" style="${fontStyle}">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
+      <div class="preview-sm">${font.style} ${font.weights ? '| ' + font.weights : ''}</div>
+    </div>
+    <div class="license">${font.license || (isGoogle ? 'SIL OFL - חינם לשימוש מסחרי' : 'חינם - בדוק רשיון')}</div>
+  `;
+  container.appendChild(card);
+}
+
+const gg = document.getElementById('google-grid');
+googleFonts.forEach(f => renderCard(f, gg, true));
+
+const ag = document.getElementById('aaa-grid');
+aaaFonts.forEach(f => renderCard(f, ag));
+
+const og = document.getElementById('other-grid');
+otherFonts.forEach(f => renderCard(f, og));
+
+function filterFonts(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.toggle('hidden', !c.dataset.name.includes(q));
+  });
+}
+
+function filterCat(cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card').forEach(c => {
+    if (cat === 'all') { c.classList.remove('hidden'); return; }
+    c.classList.toggle('hidden', !c.dataset.cat.includes(cat));
+  });
+}
+</script>
+</body>
+</html>
