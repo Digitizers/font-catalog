@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>fontRenders() regression test</title>
+<!--
+  Regression tests for the preview audit in ../index.html.
+
+  fontRenders() decides whether a card may keep its live Hebrew preview. Google
+  Fonts splits a family into one @font-face per subset AND per weight, each with
+  its own unicode-range, so a family can load partially: Hebrew missing while
+  Latin is fine, or weight 700 fine while the weight the preview draws failed.
+  Any check coarser than "the face CSS selects for this text and weight is
+  loaded" leaves a card showing Hebrew in a fallback face.
+
+  EVERY core fixture is a self-contained data: URI or a local 404. The suite has
+  no network dependency, because a network-dependent fixture does not merely
+  risk a false failure — a negative case built on a remote font passes
+  VACUOUSLY when that font cannot be fetched (no faces registered, so the
+  function returns false for the wrong reason) and the suite reports green while
+  testing nothing.
+
+  The two real Google families are kept as an optional smoke check that reports
+  SKIP, never PASS, when the network is unavailable — so it can never manufacture
+  a green.
+
+  Fixtures:
+    Fixture Hebrew        generated TTF, U+05D0-U+05EA, no unicode-range.
+                          Positive, and covers "unranged face counts as Hebrew".
+    Fixture Hebrew Ranged same face with an explicit Hebrew unicode-range,
+                          mirroring how Google Fonts declares its subsets.
+    Fixture Latin Only    generated TTF of digits, declared with a Latin
+                          unicode-range. Family exists, ships no Hebrew face.
+    Split Weight Font     weight 400 -> 404, weight 700 -> good face. The
+                          preview draws 400, so it must NOT qualify.
+    Broken Hebrew Font    unranged, src 404s. Hebrew face exists, network failed.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Heebo:wght@400&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Fixture Hebrew'; src: url('data:font/ttf;base64,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') format('truetype'); }
+  @font-face { font-family: 'Fixture Hebrew Ranged'; src: url('data:font/ttf;base64,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') format('truetype'); unicode-range: U+0590-05FF; }
+  @font-face { font-family: 'Fixture Latin Only'; src: url('data:font/ttf;base64,AAEAAAAKAIAAAwAgT1MvMkUARC0AAAEoAAAAYGNtYXAAZQBsAAABpAAAADxnbHlmukEtqgAAAfwAAAEEaGVhZC6Tz4oAAACsAAAANmhoZWEFegHOAAAA5AAAACRobXR4A8ABaAAAAYgAAAAabG9jYQHHAYYAAAHgAAAAGm1heHAADgAGAAABCAAAACBuYW1lMALAdwAAAwAAAADGcG9zdPb6aToAAAPIAAAAkgABAAAAAQAA5Qu3dV8PPPUAAwPoAAAAAOaSxmUAAAAA5pLGZQA8AAACHAHgAAAAAwACAAAAAAAAAAEAAAMg/zgAAAJYADwAPAIcAAEAAAAAAAAAAAAAAAAAAAABAAEAAAAMAAQAAQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAwJYAZAABQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAPz8/PwAAACAAOQMg/zgAAAMgAMgAAAAAAAAAAAAAAAAAAAAgAAACWAA8ADwAPAA8ADwAPAA8ADwAPAA8ADwAPAAAAAAAAgAAAAMAAAAUAAMAAQAAABQABAAoAAAABgAEAAEAAgAgADn//wAAACAAMP///+v/0QABAAAAAAAAAAAAAAANABoAJwA0AEEATgBbAGgAdQCCAIIAAAABADwAAAIcAREAAwAAMyERITwB4P4gAREAAAEAPAAAAhwBKAADAAAzIREhPAHg/iABKAAAAQA8AAACHAE/AAMAADMhESE8AeD+IAE/AAABADwAAAIcAVYAAwAAMyERITwB4P4gAVYAAAEAPAAAAhwBbQADAAAzIREhPAHg/iABbQAAAQA8AAACHAGEAAMAADMhESE8AeD+IAGEAAABADwAAAIcAZsAAwAAMyERITwB4P4gAZsAAAEAPAAAAhwBsgADAAAzIREhPAHg/iABsgAAAQA8AAACHAHJAAMAADMhESE8AeD+IAHJAAABADwAAAIcAeAAAwAAMyERITwB4P4gAeAAAAAABgBOAAEAAAAAAAEADQAAAAEAAAAAAAIABwANAAEAAAAAAAYAFAAUAAMAAQQJAAEAGgAoAAMAAQQJAAIADgBCAAMAAQQJAAYAKABQRml4dHVyZSBMYXRpblJlZ3VsYXJGaXh0dXJlTGF0aW4tUmVndWxhcgBGAGkAeAB0AHUAcgBlACAATABhAHQAaQBuAFIAZQBnAHUAbABhAHIARgBpAHgAdAB1AHIAZQBMAGEAdABpAG4ALQBSAGUAZwB1AGwAYQByAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAABAgEDAQQBBQEGAQcBCAEJAQoBCwEMB3VuaTAwMzAHdW5pMDAzMQd1bmkwMDMyB3VuaTAwMzMHdW5pMDAzNAd1bmkwMDM1B3VuaTAwMzYHdW5pMDAzNwd1bmkwMDM4B3VuaTAwMzkHdW5pMDAyMAAA') format('truetype'); unicode-range: U+0000-00FF; }
+
+  @font-face { font-family: 'Broken Hebrew Font'; src: url('./does-not-exist-404.woff2') format('woff2'); }
+
+  /* Hebrew subset loads, Latin subset 404s. The preview draws a comma, spaces
+     and 0123456789, all Latin-range, so this must NOT qualify. */
+  @font-face { font-family: 'Split Subset Font'; src: url('data:font/ttf;base64,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') format('truetype'); unicode-range: U+0590-05FF; }
+  @font-face { font-family: 'Split Subset Font'; src: url('./does-not-exist-404.woff2') format('woff2'); unicode-range: U+0000-058F; }
+
+  /* The weight the preview actually draws is the broken one. */
+  @font-face { font-family: 'Split Weight Font'; font-weight: 400; src: url('./does-not-exist-404.woff2') format('woff2'); }
+  @font-face { font-family: 'Split Weight Font'; font-weight: 700; src: url('data:font/ttf;base64,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') format('truetype'); }
+
+  body { font-family: monospace; background: #111; color: #eee; padding: 24px; line-height: 1.7; }
+  .pass { color: #6ee787; }
+  .fail { color: #ff7b72; }
+  .skip { color: #d29922; }
+</style>
+</head>
+<body>
+<pre id="out"></pre>
+<script>
+// ---- kept in sync with ../index.html ----------------------------------------
+const HEBREW_TEST_CODEPOINT = 0x05D0; // aleph
+
+function parseUnicodeRange(value) {
+  return value.split(',').reduce((ranges, token) => {
+    const m = /^U\+([0-9A-F?]{1,6})(?:-([0-9A-F]{1,6}))?$/i.exec(token.trim());
+    if (!m) return ranges;
+    if (m[1].includes('?')) {
+      ranges.push([
+        parseInt(m[1].replace(/\?/g, '0'), 16),
+        parseInt(m[1].replace(/\?/g, 'F'), 16),
+      ]);
+    } else {
+      const lo = parseInt(m[1], 16);
+      ranges.push([lo, m[2] ? parseInt(m[2], 16) : lo]);
+    }
+    return ranges;
+  }, []);
+}
+
+const unquote = s => String(s).trim().replace(/^["\']|["\']$/g, '');
+
+function facesFor(family) {
+  const want = unquote(family).toLowerCase();
+  return Array.from(document.fonts).filter(f => unquote(f.family).toLowerCase() === want);
+}
+
+const coversHebrew = face =>
+  parseUnicodeRange(face.unicodeRange || 'U+0-10FFFF')
+    .some(([lo, hi]) => lo <= HEBREW_TEST_CODEPOINT && HEBREW_TEST_CODEPOINT <= hi);
+
+const PREVIEW_FONT_STYLE = `400 ${32}px`;
+// The literal text the cards render, Latin characters included.
+const PREVIEW_LG = '\u05E9\u05DC\u05D5\u05DD \u05E2\u05D5\u05DC\u05DD, \u05D3\u05D9\u05D2\u05D9\u05D8\u05D9\u05D9\u05D6\u05E8';
+const PREVIEW_MD = '\u05D0\u05D1\u05D2\u05D3\u05D4\u05D5\u05D6\u05D7\u05D8\u05D9 \u05DB\u05DC\u05DE\u05E0\u05E1\u05E2\u05E4\u05E6\u05E7\u05E8\u05E9\u05EA 0123456789';
+const PREVIEW_TEXT = PREVIEW_LG + PREVIEW_MD;
+const HEBREW_SAMPLE = '\u05D0\u05D1\u05D2\u05D3\u05D4\u05D5\u05D6\u05D7\u05D8';
+
+async function fontRenders(family) {
+  const faces = facesFor(family);
+  if (!faces.length) return false;
+  if (!faces.some(coversHebrew)) return false;
+  const font = `${PREVIEW_FONT_STYLE} "${unquote(family)}"`;
+  try {
+    await document.fonts.load(font, PREVIEW_TEXT);
+  } catch (e) {
+    return false;
+  }
+  return document.fonts.check(font, PREVIEW_TEXT);
+}
+// ---- end synced block -------------------------------------------------------
+
+const results = [];
+const check = (name, actual, expected) =>
+  results.push({ name, actual, expected, state: actual === expected ? 'PASS' : 'FAIL' });
+const skip = (name, why) => results.push({ name: name + ' \u2014 ' + why, state: 'SKIP' });
+
+document.fonts.ready.then(async () => {
+  // --- offline-deterministic core ------------------------------------------
+
+  // A family that exists but ships no Hebrew face. This is the round-1 defect:
+  // any check answering "the family loaded" rather than "Hebrew loaded" passes.
+  await document.fonts.load('400 32px "Fixture Latin Only"', '0123456789');
+  check('a family with no Hebrew face does not qualify',
+    await fontRenders('Fixture Latin Only'), false);
+  check('  ...and its Latin face really did load, so the case is genuine',
+    document.fonts.check('400 32px "Fixture Latin Only"', '0123456789'), true);
+  check('document.fonts.check() alone would have passed it (documents the bug)',
+    document.fonts.check('400 32px "Fixture Latin Only"', HEBREW_SAMPLE), true);
+
+  // Round-2 defect: the preview draws weight 400, so a loaded 700 must not
+  // rescue a failed 400.
+  check('a family whose previewed weight failed does not qualify, even though another weight loaded',
+    await fontRenders('Split Weight Font'), false);
+  await document.fonts.load('700 32px "Split Weight Font"', HEBREW_SAMPLE).catch(() => {});
+  check('  ...and its 700 face really does load, so the case is genuine',
+    document.fonts.check('700 32px "Split Weight Font"', HEBREW_SAMPLE), true);
+
+  // Round 6: Hebrew binary fine, Latin binary dead. The preview shows a comma
+  // and 0123456789 from that Latin face, so the card must not stay live.
+  check('a family whose Latin subset failed does not qualify, even though Hebrew loaded',
+    await fontRenders('Split Subset Font'), false);
+  await document.fonts.load('400 32px "Split Subset Font"', HEBREW_SAMPLE).catch(() => {});
+  check('  ...and its Hebrew face really does load, so the case is genuine',
+    document.fonts.check('400 32px "Split Subset Font"', HEBREW_SAMPLE), true);
+
+  check('an unranged Hebrew face that loads qualifies',
+    await fontRenders('Fixture Hebrew'), true);
+  check('an explicitly Hebrew-ranged face that loads qualifies',
+    await fontRenders('Fixture Hebrew Ranged'), true);
+  check('a Hebrew face whose src fails does not qualify',
+    await fontRenders('Broken Hebrew Font'), false);
+  check('an unknown family does not qualify',
+    await fontRenders('No Such Font Family 12345'), false);
+
+  // unicode-range parsing, including the wildcard form the grammar allows.
+  const face = r => ({ unicodeRange: r });
+  check('parses an interval covering Hebrew', coversHebrew(face('U+590-5FF')), true);
+  check('parses an interval excluding Hebrew', coversHebrew(face('U+0-FF, U+131')), false);
+  check('parses the wildcard form', coversHebrew(face('U+5??')), true);
+  check('parses a single codepoint', coversHebrew(face('U+5D0')), true);
+  check('treats a missing unicode-range as covering everything',
+    coversHebrew({ unicodeRange: undefined }), true);
+
+  // --- optional smoke check against the real Google Fonts service ----------
+  // Guards against Google changing its subset structure under us. Everything
+  // here reports SKIP rather than PASS or FAIL when the environment, not the
+  // code, is what failed — an offline run must never manufacture a green, and a
+  // blocked network must never manufacture a red.
+  //
+  // The two halves fail for different reasons, so they are gated differently:
+  //
+  //   The positive needs the font BINARY. googleapis.com and gstatic.com are
+  //   separate hosts, so the stylesheet can arrive while the woff2 is blocked;
+  //   the faces then register, any gate that only asks "is the family known?"
+  //   passes, and a correct implementation reports a false failure. Only an
+  //   errored face proves it was the environment.
+  //
+  //   The negative needs only the STYLESHEET. Rubik Mono One is refused because
+  //   no registered face covers Hebrew, which is decided by unicode-range in the
+  //   CSS — no binary is ever fetched, so a blocked gstatic cannot affect it.
+
+  const NAME_POS = '[network] a real Google Hebrew subset is detected';
+  if (!facesFor('Heebo').length) {
+    skip(NAME_POS, 'Google Fonts stylesheet unreachable');
+  } else {
+    const detected = await fontRenders('Heebo');
+    const binaryFailed = facesFor('Heebo').filter(coversHebrew).some(f => f.status === 'error');
+    if (!detected && binaryFailed) {
+      skip(NAME_POS, 'gstatic font binary unreachable');
+    } else {
+      check(NAME_POS, detected, true);
+    }
+  }
+
+  const NAME_NEG = '[network] a real Google family with no Hebrew subset is refused';
+  if (facesFor('Rubik Mono One').length) {
+    check(NAME_NEG, await fontRenders('Rubik Mono One'), false);
+  } else {
+    skip(NAME_NEG, 'Google Fonts stylesheet unreachable');
+  }
+
+  const failed = results.filter(r => r.state === 'FAIL');
+  const skipped = results.filter(r => r.state === 'SKIP');
+  const cls = { PASS: 'pass', FAIL: 'fail', SKIP: 'skip' };
+  document.getElementById('out').innerHTML =
+    results.map(r =>
+      `<span class="${cls[r.state]}">${r.state}</span>  ${r.name}` +
+      (r.state === 'FAIL' ? `  (expected ${r.expected}, got ${r.actual})` : '')
+    ).join('\n') +
+    `\n\n${failed.length ? `${failed.length} FAILED` : `all ${results.length - skipped.length} passed`}` +
+    (skipped.length ? `, ${skipped.length} skipped` : '');
+  document.title = failed.length ? `FAIL ${failed.length}` : 'PASS';
+});
+</script>
+</body>
+</html>
