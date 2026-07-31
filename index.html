@@ -301,13 +301,32 @@ const coversHebrew = face =>
   parseUnicodeRange(face.unicodeRange || 'U+0-10FFFF')
     .some(([lo, hi]) => lo <= HEBREW_TEST_CODEPOINT && HEBREW_TEST_CODEPOINT <= hi);
 
+// The previews inherit the page's normal weight, so the only face that decides
+// whether a card is honest is the one CSS selects for that weight and this text.
+// Asking about any other face answers the wrong question — a family whose 400
+// source failed but whose 700 source loaded would pass while the text on screen
+// is a fallback — and loading them all would pull dozens of weights this page
+// never draws.
+//
+// document.fonts.load()/check() do exactly that selection: given the font
+// shorthand and the sample text, they touch only the face CSS would use. Their
+// one hole is that a family with no matching face is ignored rather than
+// refused, which is why the Hebrew-coverage guard above still runs first.
+const PREVIEW_FONT_STYLE = `400 ${32}px`; // matches .preview-lg / .preview-md
+const HEBREW_SAMPLE = 'אבגדהוזחט';
+
 async function fontRenders(family) {
   const faces = facesFor(family);
   if (!faces.length) return false;               // no @font-face at all
-  const hebrew = faces.filter(coversHebrew);
-  if (!hebrew.length) return false;              // family exists but ships no Hebrew
-  await Promise.allSettled(hebrew.map(f => f.load()));
-  return hebrew.some(f => f.status === 'loaded'); // 'error' => the src failed
+  if (!faces.some(coversHebrew)) return false;   // family exists but ships no Hebrew
+
+  const font = `${PREVIEW_FONT_STYLE} "${unquote(family)}"`;
+  try {
+    await document.fonts.load(font, HEBREW_SAMPLE);
+  } catch (e) {
+    return false;
+  }
+  return document.fonts.check(font, HEBREW_SAMPLE);
 }
 
 async function auditPreviews() {

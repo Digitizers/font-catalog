@@ -4,36 +4,40 @@
 <meta charset="UTF-8">
 <title>fontRenders() regression test</title>
 <!--
-  Regression test for the preview audit in ../index.html.
+  Regression tests for the preview audit in ../index.html.
 
   fontRenders() decides whether a card may keep its live Hebrew preview. Google
-  Fonts splits a family into one @font-face per subset, each guarded by its own
-  unicode-range, so a family's Hebrew face can be absent or fail to load while
-  its Latin face is fine. Anything that answers "did this font load?" without
-  asking about Hebrew specifically will keep a card showing Hebrew in a fallback
-  face — the exact defect the no-preview state exists to prevent.
+  Fonts splits a family into one @font-face per subset AND per weight, each with
+  its own unicode-range, so a family can load partially: Hebrew missing while
+  Latin is fine, or weight 700 fine while the weight the preview actually draws
+  failed. Any check coarser than "the face CSS selects for this text and weight
+  is loaded" leaves a card showing Hebrew in a fallback face.
 
-  Fixtures, all real rather than mocked:
-    Rubik Mono One — a genuine Google font shipping latin + cyrillic and no
-      Hebrew subset. Stands in for "family loads, Hebrew face does not exist".
-    Heebo — full Hebrew subset. The must-not-regress case.
-    Broken Hebrew Font — declared below with a src that 404s, covering the whole
-      range. Stands in for "Hebrew face exists but the network failed".
-    Unranged Local Font — no unicode-range at all, like the self-hosted
-      Digitizer faces, so it must be treated as covering Hebrew.
+  Fixtures. The ones that must SUCCEED are self-contained data: URIs so the
+  suite does not depend on the host having particular system fonts:
+
+    Rubik Mono One   real Google font, latin + cyrillic, no Hebrew subset.
+                     Stands in for "family loads, Hebrew face does not exist".
+    Heebo            real full Hebrew subset. The must-not-regress case.
+    Fixture Hebrew   generated TrueType face covering U+05D0-U+05EA, embedded
+                     below. No unicode-range declared, so it also covers the
+                     "unranged face counts as Hebrew" rule.
+    Split Weight Font  weight 400 points at a 404, weight 700 at the good data
+                     URI. The preview draws 400, so this must NOT qualify.
+    Broken Hebrew Font  unranged, src 404s. "Hebrew face exists, network failed".
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Heebo:wght@400&display=swap" rel="stylesheet">
 <style>
-  @font-face {
-    font-family: 'Broken Hebrew Font';
-    src: url('./does-not-exist-404.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Unranged Local Font';
-    src: local('Arial'), local('Helvetica');
-  }
+  @font-face { font-family: 'Fixture Hebrew'; src: url('data:font/ttf;base64,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') format('truetype'); }
+
+  @font-face { font-family: 'Broken Hebrew Font'; src: url('./does-not-exist-404.woff2') format('woff2'); }
+
+  /* The weight the preview actually draws is the broken one. */
+  @font-face { font-family: 'Split Weight Font'; font-weight: 400; src: url('./does-not-exist-404.woff2') format('woff2'); }
+  @font-face { font-family: 'Split Weight Font'; font-weight: 700; src: url('data:font/ttf;base64,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') format('truetype'); }
+
   body { font-family: monospace; background: #111; color: #eee; padding: 24px; line-height: 1.7; }
   .pass { color: #6ee787; }
   .fail { color: #ff7b72; }
@@ -43,7 +47,7 @@
 <pre id="out"></pre>
 <script>
 // ---- kept in sync with ../index.html ----------------------------------------
-const HEBREW_TEST_CODEPOINT = 0x05D0; // א
+const HEBREW_TEST_CODEPOINT = 0x05D0; // aleph
 
 function parseUnicodeRange(value) {
   return value.split(',').reduce((ranges, token) => {
@@ -62,7 +66,7 @@ function parseUnicodeRange(value) {
   }, []);
 }
 
-const unquote = s => String(s).trim().replace(/^["']|["']$/g, '');
+const unquote = s => String(s).trim().replace(/^["\']|["\']$/g, '');
 
 function facesFor(family) {
   const want = unquote(family).toLowerCase();
@@ -73,13 +77,20 @@ const coversHebrew = face =>
   parseUnicodeRange(face.unicodeRange || 'U+0-10FFFF')
     .some(([lo, hi]) => lo <= HEBREW_TEST_CODEPOINT && HEBREW_TEST_CODEPOINT <= hi);
 
+const PREVIEW_FONT_STYLE = `400 ${32}px`;
+const HEBREW_SAMPLE = '\u05D0\u05D1\u05D2\u05D3\u05D4\u05D5\u05D6\u05D7\u05D8';
+
 async function fontRenders(family) {
   const faces = facesFor(family);
   if (!faces.length) return false;
-  const hebrew = faces.filter(coversHebrew);
-  if (!hebrew.length) return false;
-  await Promise.allSettled(hebrew.map(f => f.load()));
-  return hebrew.some(f => f.status === 'loaded');
+  if (!faces.some(coversHebrew)) return false;
+  const font = `${PREVIEW_FONT_STYLE} "${unquote(family)}"`;
+  try {
+    await document.fonts.load(font, HEBREW_SAMPLE);
+  } catch (e) {
+    return false;
+  }
+  return document.fonts.check(font, HEBREW_SAMPLE);
 }
 // ---- end synced block -------------------------------------------------------
 
@@ -88,26 +99,29 @@ const check = (name, actual, expected) =>
   results.push({ name, actual, expected, ok: actual === expected });
 
 document.fonts.ready.then(async () => {
-  // Latin face loaded, Hebrew face nonexistent. The regression Codex flagged:
-  // any check that answers "the family loaded" rather than "Hebrew loaded"
-  // passes this and leaves a fallback preview on screen.
+  // Round 1: a family whose Hebrew face does not exist. Any check that answers
+  // "the family loaded" rather than "Hebrew loaded" passes this.
   await document.fonts.load('72px "Rubik Mono One"', '0123456789');
-  check('a family with no Hebrew subset does not qualify for a live preview',
+  check('a family with no Hebrew subset does not qualify',
     await fontRenders('Rubik Mono One'), false);
+  check('document.fonts.check() alone would have passed it (documents the bug)',
+    document.fonts.check('72px "Rubik Mono One"', '\u05E9\u05DC\u05D5\u05DD'), true);
 
-  // Guards the two mechanisms this replaced, so neither can come back unnoticed.
-  check('document.fonts.check() would have wrongly passed it (documents the bug)',
-    document.fonts.check('72px "Rubik Mono One"', 'שלום'), true);
+  // Round 2: the preview draws weight 400, so a loaded 700 must not rescue a
+  // failed 400.
+  check('a family whose previewed weight failed does not qualify, even though another weight loaded',
+    await fontRenders('Split Weight Font'), false);
+  // Proves the fixture is live rather than simply broken: the 700 face does
+  // load, so the verdict above comes from weight selection and not from the
+  // whole family failing.
+  await document.fonts.load('700 32px "Split Weight Font"', HEBREW_SAMPLE).catch(() => {});
+  check('  ...and its 700 face really does load, so the case is genuine',
+    document.fonts.check('700 32px "Split Weight Font"', HEBREW_SAMPLE), true);
 
-  check('a real Hebrew subset is detected',
-    await fontRenders('Heebo'), true);
-
-  check('a Hebrew face whose src fails to load does not qualify',
+  check('a real Hebrew subset is detected', await fontRenders('Heebo'), true);
+  check('an unranged face that loads qualifies', await fontRenders('Fixture Hebrew'), true);
+  check('a Hebrew face whose src fails does not qualify',
     await fontRenders('Broken Hebrew Font'), false);
-
-  check('a face declaring no unicode-range counts as covering Hebrew',
-    await fontRenders('Unranged Local Font'), true);
-
   check('an unknown family does not qualify',
     await fontRenders('No Such Font Family 12345'), false);
 
@@ -117,6 +131,8 @@ document.fonts.ready.then(async () => {
   check('parses an interval excluding Hebrew', coversHebrew(face('U+0-FF, U+131')), false);
   check('parses the wildcard form', coversHebrew(face('U+5??')), true);
   check('parses a single codepoint', coversHebrew(face('U+5D0')), true);
+  check('treats a missing unicode-range as covering everything',
+    coversHebrew({ unicodeRange: undefined }), true);
 
   const failed = results.filter(r => !r.ok);
   document.getElementById('out').innerHTML =
