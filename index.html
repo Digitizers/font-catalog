@@ -237,11 +237,27 @@ aaaFonts.forEach(f => ag.appendChild(makeCard({
 const og = $('other-grid');
 otherFonts.forEach(f => og.appendChild(makeCard({ ...f, license: f.license })));
 
-$('gf-note').textContent =
-  googleFonts.length + ' משפחות עם תמיכת עברית מאומתת מול css2 API. תצוגה חיה.';
-$('subtitle').textContent =
-  (1 + googleFonts.length) + ' פונטים עם תצוגה חיה · ' +
-  (aaaFonts.length + otherFonts.length) + ' להורדה · מעודכן יולי 2026';
+// Both headline counts are read back off the rendered cards rather than off the
+// source arrays, and are recomputed after the audit runs. A card that gets
+// downgraded loses its 'livepreview' category, so a static count taken from the
+// arrays would keep advertising previews the page is no longer showing — the
+// same kind of claim-the-render-disproves that this whole page exists to avoid.
+function renderCounts() {
+  const live = sel => document.querySelectorAll(sel + ' .card[data-cat~="livepreview"]').length;
+  const cards = sel => document.querySelectorAll(sel + ' .card').length;
+
+  const liveTotal = live('#owned-grid') + live('#google-grid');
+  const downloadTotal = cards('#aaa-grid') + cards('#other-grid');
+
+  $('gf-note').textContent =
+    live('#google-grid') + ' מתוך ' + cards('#google-grid') +
+    ' משפחות עם תמיכת עברית מאומתת מול css2 API מוצגות בתצוגה חיה.';
+  $('subtitle').textContent =
+    liveTotal + ' פונטים עם תצוגה חיה · ' +
+    downloadTotal + ' להורדה · מעודכן יולי 2026';
+}
+
+renderCounts();
 
 // Defence in depth: if a webfont fails to load, downgrade the card to the honest
 // "no preview" state instead of silently showing a fallback face.
@@ -343,6 +359,7 @@ async function auditPreviews() {
         <div class="no-preview-why">הפונט לא נטען בדפדפן הזה — לא מוצגת תצוגה מקדימה כדי לא להטעות.</div>
       </div>`;
   });
+  renderCounts();
   applyFilters();
 }
 
