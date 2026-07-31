@@ -151,18 +151,41 @@ document.fonts.ready.then(async () => {
     coversHebrew({ unicodeRange: undefined }), true);
 
   // --- optional smoke check against the real Google Fonts service ----------
-  // Reports SKIP rather than PASS when unreachable, so an offline run can never
-  // look green on the strength of a fixture that never loaded.
-  if (facesFor('Heebo').length) {
-    check('[network] a real Google Hebrew subset is detected', await fontRenders('Heebo'), true);
+  // Guards against Google changing its subset structure under us. Everything
+  // here reports SKIP rather than PASS or FAIL when the environment, not the
+  // code, is what failed — an offline run must never manufacture a green, and a
+  // blocked network must never manufacture a red.
+  //
+  // The two halves fail for different reasons, so they are gated differently:
+  //
+  //   The positive needs the font BINARY. googleapis.com and gstatic.com are
+  //   separate hosts, so the stylesheet can arrive while the woff2 is blocked;
+  //   the faces then register, any gate that only asks "is the family known?"
+  //   passes, and a correct implementation reports a false failure. Only an
+  //   errored face proves it was the environment.
+  //
+  //   The negative needs only the STYLESHEET. Rubik Mono One is refused because
+  //   no registered face covers Hebrew, which is decided by unicode-range in the
+  //   CSS — no binary is ever fetched, so a blocked gstatic cannot affect it.
+
+  const NAME_POS = '[network] a real Google Hebrew subset is detected';
+  if (!facesFor('Heebo').length) {
+    skip(NAME_POS, 'Google Fonts stylesheet unreachable');
   } else {
-    skip('[network] a real Google Hebrew subset is detected', 'Google Fonts unreachable');
+    const detected = await fontRenders('Heebo');
+    const binaryFailed = facesFor('Heebo').filter(coversHebrew).some(f => f.status === 'error');
+    if (!detected && binaryFailed) {
+      skip(NAME_POS, 'gstatic font binary unreachable');
+    } else {
+      check(NAME_POS, detected, true);
+    }
   }
+
+  const NAME_NEG = '[network] a real Google family with no Hebrew subset is refused';
   if (facesFor('Rubik Mono One').length) {
-    check('[network] a real Google family with no Hebrew subset is refused',
-      await fontRenders('Rubik Mono One'), false);
+    check(NAME_NEG, await fontRenders('Rubik Mono One'), false);
   } else {
-    skip('[network] a real Google family with no Hebrew subset is refused', 'Google Fonts unreachable');
+    skip(NAME_NEG, 'Google Fonts stylesheet unreachable');
   }
 
   const failed = results.filter(r => r.state === 'FAIL');
