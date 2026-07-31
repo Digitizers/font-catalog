@@ -143,6 +143,14 @@ const googleFonts = [
   {name:"Varela Round", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
 ];
 
+// The two sample lines, and the exact string the audit verifies. They are one
+// constant each so the text that gets rendered and the text that gets checked
+// cannot drift apart: the audit's promise is about what the card displays, so
+// it has to ask about precisely those characters.
+const PREVIEW_LG = 'שלום עולם, דיגיטייזר';
+const PREVIEW_MD = 'אבגדהוזחטי כלמנסעפצקרשת 0123456789';
+const PREVIEW_TEXT = PREVIEW_LG + PREVIEW_MD;
+
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function makeCard({name, he, cat, style, weights, source, license, family}) {
@@ -157,8 +165,8 @@ function makeCard({name, he, cat, style, weights, source, license, family}) {
   // live preview. The no-preview state still exists, but it is reached only by
   // auditPreviews() downgrading a card whose font failed to load.
   const body = `<div class="preview">
-         <div class="preview-lg" style="font-family:'${family}'">שלום עולם, דיגיטייזר</div>
-         <div class="preview-md" style="font-family:'${family}'">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
+         <div class="preview-lg" style="font-family:'${family}'">${esc(PREVIEW_LG)}</div>
+         <div class="preview-md" style="font-family:'${family}'">${esc(PREVIEW_MD)}</div>
          <div class="preview-sm">${esc(style)}${weights ? ' | ' + esc(weights) : ''}</div>
        </div>`;
 
@@ -274,8 +282,13 @@ const coversHebrew = face =>
 // shorthand and the sample text, they touch only the face CSS would use. Their
 // one hole is that a family with no matching face is ignored rather than
 // refused, which is why the Hebrew-coverage guard above still runs first.
+// Google Fonts registers a separate face per subset, so a family can load its
+// Hebrew binary while its Latin one fails. The samples contain a comma, spaces
+// and 0123456789 — all Latin-range — so a Hebrew-only probe would pass a card
+// whose digits and punctuation are drawn in a fallback face. Verifying the
+// literal preview text closes that: check() demands every face CSS selects for
+// these characters be loaded, whichever subset it belongs to.
 const PREVIEW_FONT_STYLE = `400 ${32}px`; // matches .preview-lg / .preview-md
-const HEBREW_SAMPLE = 'אבגדהוזחט';
 
 async function fontRenders(family) {
   const faces = facesFor(family);
@@ -284,11 +297,11 @@ async function fontRenders(family) {
 
   const font = `${PREVIEW_FONT_STYLE} "${unquote(family)}"`;
   try {
-    await document.fonts.load(font, HEBREW_SAMPLE);
+    await document.fonts.load(font, PREVIEW_TEXT);
   } catch (e) {
     return false;
   }
-  return document.fonts.check(font, HEBREW_SAMPLE);
+  return document.fonts.check(font, PREVIEW_TEXT);
 }
 
 async function auditPreviews() {
