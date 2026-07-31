@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>fontRenders() regression test</title>
+<!--
+  Regression test for the preview audit in ../index.html.
+
+  fontRenders() decides whether a card may keep its live Hebrew preview. Google
+  Fonts splits a family into one @font-face per subset, each guarded by its own
+  unicode-range, so a family's Hebrew face can be absent or fail to load while
+  its Latin face is fine. Anything that answers "did this font load?" without
+  asking about Hebrew specifically will keep a card showing Hebrew in a fallback
+  face — the exact defect the no-preview state exists to prevent.
+
+  Fixtures, all real rather than mocked:
+    Rubik Mono One — a genuine Google font shipping latin + cyrillic and no
+      Hebrew subset. Stands in for "family loads, Hebrew face does not exist".
+    Heebo — full Hebrew subset. The must-not-regress case.
+    Broken Hebrew Font — declared below with a src that 404s, covering the whole
+      range. Stands in for "Hebrew face exists but the network failed".
+    Unranged Local Font — no unicode-range at all, like the self-hosted
+      Digitizer faces, so it must be treated as covering Hebrew.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Heebo:wght@400&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Broken Hebrew Font';
+    src: url('./does-not-exist-404.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Unranged Local Font';
+    src: local('Arial'), local('Helvetica');
+  }
+  body { font-family: monospace; background: #111; color: #eee; padding: 24px; line-height: 1.7; }
+  .pass { color: #6ee787; }
+  .fail { color: #ff7b72; }
+</style>
+</head>
+<body>
+<pre id="out"></pre>
+<script>
+// ---- kept in sync with ../index.html ----------------------------------------
+const HEBREW_TEST_CODEPOINT = 0x05D0; // א
+
+function parseUnicodeRange(value) {
+  return value.split(',').reduce((ranges, token) => {
+    const m = /^U\+([0-9A-F?]{1,6})(?:-([0-9A-F]{1,6}))?$/i.exec(token.trim());
+    if (!m) return ranges;
+    if (m[1].includes('?')) {
+      ranges.push([
+        parseInt(m[1].replace(/\?/g, '0'), 16),
+        parseInt(m[1].replace(/\?/g, 'F'), 16),
+      ]);
+    } else {
+      const lo = parseInt(m[1], 16);
+      ranges.push([lo, m[2] ? parseInt(m[2], 16) : lo]);
+    }
+    return ranges;
+  }, []);
+}
+
+const unquote = s => String(s).trim().replace(/^["']|["']$/g, '');
+
+function facesFor(family) {
+  const want = unquote(family).toLowerCase();
+  return Array.from(document.fonts).filter(f => unquote(f.family).toLowerCase() === want);
+}
+
+const coversHebrew = face =>
+  parseUnicodeRange(face.unicodeRange || 'U+0-10FFFF')
+    .some(([lo, hi]) => lo <= HEBREW_TEST_CODEPOINT && HEBREW_TEST_CODEPOINT <= hi);
+
+async function fontRenders(family) {
+  const faces = facesFor(family);
+  if (!faces.length) return false;
+  const hebrew = faces.filter(coversHebrew);
+  if (!hebrew.length) return false;
+  await Promise.allSettled(hebrew.map(f => f.load()));
+  return hebrew.some(f => f.status === 'loaded');
+}
+// ---- end synced block -------------------------------------------------------
+
+const results = [];
+const check = (name, actual, expected) =>
+  results.push({ name, actual, expected, ok: actual === expected });
+
+document.fonts.ready.then(async () => {
+  // Latin face loaded, Hebrew face nonexistent. The regression Codex flagged:
+  // any check that answers "the family loaded" rather than "Hebrew loaded"
+  // passes this and leaves a fallback preview on screen.
+  await document.fonts.load('72px "Rubik Mono One"', '0123456789');
+  check('a family with no Hebrew subset does not qualify for a live preview',
+    await fontRenders('Rubik Mono One'), false);
+
+  // Guards the two mechanisms this replaced, so neither can come back unnoticed.
+  check('document.fonts.check() would have wrongly passed it (documents the bug)',
+    document.fonts.check('72px "Rubik Mono One"', 'שלום'), true);
+
+  check('a real Hebrew subset is detected',
+    await fontRenders('Heebo'), true);
+
+  check('a Hebrew face whose src fails to load does not qualify',
+    await fontRenders('Broken Hebrew Font'), false);
+
+  check('a face declaring no unicode-range counts as covering Hebrew',
+    await fontRenders('Unranged Local Font'), true);
+
+  check('an unknown family does not qualify',
+    await fontRenders('No Such Font Family 12345'), false);
+
+  // unicode-range parsing, including the wildcard form the grammar allows.
+  const face = r => ({ unicodeRange: r });
+  check('parses an interval covering Hebrew', coversHebrew(face('U+590-5FF')), true);
+  check('parses an interval excluding Hebrew', coversHebrew(face('U+0-FF, U+131')), false);
+  check('parses the wildcard form', coversHebrew(face('U+5??')), true);
+  check('parses a single codepoint', coversHebrew(face('U+5D0')), true);
+
+  const failed = results.filter(r => !r.ok);
+  document.getElementById('out').innerHTML =
+    results.map(r =>
+      `<span class="${r.ok ? 'pass' : 'fail'}">${r.ok ? 'PASS' : 'FAIL'}</span>  ${r.name}` +
+      (r.ok ? '' : `  (expected ${r.expected}, got ${r.actual})`)
+    ).join('\n') +
+    `\n\n${failed.length ? `${failed.length} FAILED` : `all ${results.length} passed`}`;
+  document.title = failed.length ? `FAIL ${failed.length}` : 'PASS';
+});
+</script>
+</body>
+</html>

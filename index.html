@@ -246,34 +246,76 @@ $('subtitle').textContent =
 // Defence in depth: if a webfont fails to load, downgrade the card to the honest
 // "no preview" state instead of silently showing a fallback face.
 //
-// document.fonts.check() is not usable here: per spec it returns true for a
-// family that has no @font-face at all (unknown families are ignored), which is
-// exactly the failure we need to catch. So compare rendered metrics instead.
-// Two base faces are tested because some families here are deliberately metric
-// compatible with a system font — Cousine with Courier, Tinos with Times — and
-// would look "unloaded" against that one base alone.
-function fontRenders(family) {
-  const probe = document.createElement('span');
-  probe.textContent = 'שלום עולם אבגדהוזחט 0123456789';
-  probe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;font-size:72px;white-space:nowrap;';
-  document.body.appendChild(probe);
-  try {
-    for (const base of ['monospace', 'serif']) {
-      probe.style.fontFamily = base;
-      const w = probe.offsetWidth, h = probe.offsetHeight;
-      probe.style.fontFamily = `"${family}",${base}`;
-      if (probe.offsetWidth !== w || probe.offsetHeight !== h) return true;
+// Two mechanisms were tried and rejected before this one, both measured:
+//
+//   document.fonts.check() — per spec a family with no matching face is simply
+//   ignored, so it answers true for a font that cannot render a single Hebrew
+//   glyph. Measured: check('72px "Rubik Mono One"', <hebrew>) === true, for a
+//   family whose faces are latin + cyrillic only.
+//
+//   Comparing rendered width against a generic base — when the first family
+//   exists but lacks the glyph, Chrome does not fall through to the next entry
+//   in the list, it goes to the system fallback. Measured on the same string:
+//   "Rubik Mono One",monospace and "Rubik Mono One",serif both come out at
+//   1211px, while monospace alone is 1296px and serif alone is 935px. Identical
+//   under both bases and different from both, so no base comparison separates
+//   "the webfont rendered this" from "something else did".
+//
+// So ask the font set directly instead of inferring from pixels. Google Fonts
+// ships one @font-face per subset, each guarded by its own unicode-range, so
+// the real question is whether this family has a face that both covers Hebrew
+// and actually loaded — which is what FontFace.unicodeRange and FontFace.status
+// report. See test/font-detection.test.html.
+
+const HEBREW_TEST_CODEPOINT = 0x05D0; // א
+
+// Parses a unicode-range value into [lo, hi] pairs, covering the three forms in
+// the grammar: single (U+20AA), interval (U+590-5FF) and wildcard (U+5??).
+function parseUnicodeRange(value) {
+  return value.split(',').reduce((ranges, token) => {
+    const m = /^U\+([0-9A-F?]{1,6})(?:-([0-9A-F]{1,6}))?$/i.exec(token.trim());
+    if (!m) return ranges;
+    if (m[1].includes('?')) {
+      ranges.push([
+        parseInt(m[1].replace(/\?/g, '0'), 16),
+        parseInt(m[1].replace(/\?/g, 'F'), 16),
+      ]);
+    } else {
+      const lo = parseInt(m[1], 16);
+      ranges.push([lo, m[2] ? parseInt(m[2], 16) : lo]);
     }
-    return false;
-  } finally {
-    probe.remove();
-  }
+    return ranges;
+  }, []);
 }
 
-function auditPreviews() {
-  document.querySelectorAll('.card[data-family]').forEach(card => {
+const unquote = s => String(s).trim().replace(/^["']|["']$/g, '');
+
+function facesFor(family) {
+  const want = unquote(family).toLowerCase();
+  return Array.from(document.fonts).filter(f => unquote(f.family).toLowerCase() === want);
+}
+
+// A face with no unicode-range covers everything — the case for the self-hosted
+// Digitizer faces, which declare no range.
+const coversHebrew = face =>
+  parseUnicodeRange(face.unicodeRange || 'U+0-10FFFF')
+    .some(([lo, hi]) => lo <= HEBREW_TEST_CODEPOINT && HEBREW_TEST_CODEPOINT <= hi);
+
+async function fontRenders(family) {
+  const faces = facesFor(family);
+  if (!faces.length) return false;               // no @font-face at all
+  const hebrew = faces.filter(coversHebrew);
+  if (!hebrew.length) return false;              // family exists but ships no Hebrew
+  await Promise.allSettled(hebrew.map(f => f.load()));
+  return hebrew.some(f => f.status === 'loaded'); // 'error' => the src failed
+}
+
+async function auditPreviews() {
+  const cards = Array.from(document.querySelectorAll('.card[data-family]'));
+  const verdicts = await Promise.all(cards.map(c => fontRenders(c.dataset.family)));
+  cards.forEach((card, i) => {
+    if (verdicts[i]) return;
     const fam = card.dataset.family;
-    if (fontRenders(fam)) return;
     card.dataset.cat = card.dataset.cat.replace(' livepreview', '');
     const p = card.querySelector('.preview');
     if (!p) return;
