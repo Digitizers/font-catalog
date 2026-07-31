@@ -295,24 +295,42 @@ async function auditPreviews() {
   const cards = Array.from(document.querySelectorAll('.card[data-family]'));
   const verdicts = await Promise.all(cards.map(c => fontRenders(c.dataset.family)));
   cards.forEach((card, i) => {
-    if (verdicts[i]) return;
-    const fam = card.dataset.family;
-    card.dataset.cat = card.dataset.cat.replace(' livepreview', '');
-    const p = card.querySelector('.preview');
-    if (!p) return;
-    p.outerHTML = `<div class="no-preview">
-        <div class="no-preview-title">${esc(fam)}</div>
-        <div class="no-preview-why">הפונט לא נטען בדפדפן הזה — לא מוצגת תצוגה מקדימה כדי לא להטעות.</div>
-      </div>`;
+    if (!verdicts[i]) downgrade(card, WHY_FAILED);
   });
   renderCounts();
   applyFilters();
 }
 
-if (document.fonts && document.fonts.ready) {
+const WHY_FAILED = 'הפונט לא נטען בדפדפן הזה — לא מוצגת תצוגה מקדימה כדי לא להטעות.';
+const WHY_UNVERIFIABLE =
+  'הדפדפן הזה לא תומך ב־Font Loading API, ולכן אי אפשר לוודא שהפונט אכן נטען — ' +
+  'לא מוצגת תצוגה מקדימה כדי לא להטעות.';
+
+function downgrade(card, why) {
+  card.dataset.cat = card.dataset.cat.replace(' livepreview', '');
+  const p = card.querySelector('.preview');
+  if (!p) return;
+  p.outerHTML = `<div class="no-preview">
+      <div class="no-preview-title">${esc(card.dataset.family)}</div>
+      <div class="no-preview-why">${esc(why)}</div>
+    </div>`;
+}
+
+// Without the Font Loading API there is no way to tell a rendered webfont from
+// a fallback, and the page's one promise is that a preview is never faked. So
+// the honest answer is to downgrade everything rather than assert previews we
+// cannot verify. Running auditPreviews() here instead would throw inside an
+// async function on Array.from(document.fonts), and the rejection would be
+// swallowed — leaving every card claiming a live preview while showing
+// fallback text, which is the exact failure this branch exists to prevent.
+if (document.fonts && document.fonts.ready && document.fonts.check) {
   document.fonts.ready.then(auditPreviews);
 } else {
-  window.addEventListener('load', auditPreviews);
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.card[data-family]').forEach(c => downgrade(c, WHY_UNVERIFIABLE));
+    renderCounts();
+    applyFilters();
+  });
 }
 
 let query = '', activeCat = 'all';
