@@ -37,8 +37,6 @@
   .no-preview { background: #0e0e10; border: 1px dashed #33333a; border-radius: 8px; padding: 16px; margin: 12px 0; }
   .no-preview-title { font-size: 13px; color: #8a8a93; margin-bottom: 6px; }
   .no-preview-why { font-size: 12px; color: #5c5c65; line-height: 1.6; }
-  .dl { display: inline-block; margin-top: 10px; font-size: 12px; color: #4cd7f6; text-decoration: none; border-bottom: 1px solid #4cd7f640; }
-  .dl:hover { border-bottom-color: #4cd7f6; }
   .search { width: 100%; padding: 12px 20px; background: #141416; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 16px; font-family: 'Heebo', sans-serif; margin-bottom: 20px; }
   .search:focus { outline: none; border-color: #4cd7f6; }
   .search::placeholder { color: #555; }
@@ -52,8 +50,8 @@
 <h1>קטלוג פונטים עבריים</h1>
 <p class="subtitle" id="subtitle">מעודכן יולי 2026</p>
 <p class="note">
-  תצוגה מקדימה חיה מוצגת רק לפונטים שנטענים כ־webfont (Google Fonts + פונטים בבעלותנו).
-  פונטים שמופצים כהורדת קובץ בלבד מסומנים במפורש ומקושרים לעמוד ההורדה — לא מוצגת עבורם תצוגה מזויפת.
+  כל פונט בקטלוג נטען כ־webfont, וכל תצוגה מקדימה כאן היא הפונט עצמו.
+  אם פונט לא נטען בדפדפן שלך, הכרטיס שלו יסומן במפורש כלא זמין — לא תוצג עבורו תצוגה מזויפת בפונט אחר.
 </p>
 
 <input type="text" class="search" placeholder="חיפוש פונט..." oninput="setQuery(this.value)">
@@ -76,10 +74,6 @@
 <h2 class="section-title">Google Fonts</h2>
 <p class="section-note" id="gf-note"></p>
 <div class="grid" id="google-grid"></div>
-
-<h2 class="section-title">מקורות נוספים — הורדה בלבד</h2>
-<p class="section-note">Culmus ואחרים. מופצים כקבצים להתקנה מקומית.</p>
-<div class="grid" id="other-grid"></div>
 
 <script>
 // Google Fonts — every family below verified against the css2 API as serving a
@@ -149,38 +143,23 @@ const googleFonts = [
   {name:"Varela Round", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
 ];
 
-const otherFonts = [
-  {name:"Frank Ruehl CLM", cat:"serif", style:"סריף, קלאסי", source:"Culmus", license:"GPL 2.0", url:"https://culmus.sourceforge.io/"},
-  {name:"Nachlieli CLM", cat:"sans", style:"סנס-סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"David CLM", cat:"serif", style:"סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"Hadasim CLM", cat:"serif", style:"סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"Simple CLM", cat:"sans", style:"סנס-סריף, מינימלי", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"Ellinia CLM", cat:"sans", style:"סנס-סריף, דק", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"Aharoni CLM", cat:"sans display", style:"סנס-סריף, בולד", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
-  {name:"Almoni", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"בדוק רישיון", url:"https://hagilda.com/"},
-  {name:"Ploni", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"מסחרי — אינו ב־Google Fonts", url:"https://hagilda.com/"},
-];
-
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-function makeCard({name, he, cat, style, weights, source, license, live, family, url}) {
+function makeCard({name, he, cat, style, weights, source, license, family}) {
   const card = document.createElement('div');
   card.className = 'card';
-  card.dataset.cat = cat + (live ? ' livepreview' : '');
+  card.dataset.cat = cat + ' livepreview';
   card.dataset.name = (name + ' ' + (he || '')).toLowerCase();
-  if (live) card.dataset.family = family;
+  card.dataset.family = family;
 
   const title = he ? `${esc(name)} <span class="font-meta">/ ${esc(he)}</span>` : esc(name);
-  const body = live
-    ? `<div class="preview">
+  // Every catalogued font is a webfont now, so a card is always built with a
+  // live preview. The no-preview state still exists, but it is reached only by
+  // auditPreviews() downgrading a card whose font failed to load.
+  const body = `<div class="preview">
          <div class="preview-lg" style="font-family:'${family}'">שלום עולם, דיגיטייזר</div>
          <div class="preview-md" style="font-family:'${family}'">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
          <div class="preview-sm">${esc(style)}${weights ? ' | ' + esc(weights) : ''}</div>
-       </div>`
-    : `<div class="no-preview">
-         <div class="no-preview-title">${esc(style)}</div>
-         <div class="no-preview-why">תצוגה מקדימה לא זמינה — הפונט מופץ כקובץ להורדה ולא כ־webfont.</div>
-         <a class="dl" href="${esc(url)}" target="_blank" rel="noopener">לעמוד ההורדה ↗</a>
        </div>`;
 
   card.innerHTML = `
@@ -203,12 +182,8 @@ $('owned-grid').appendChild(makeCard({
 
 const gg = $('google-grid');
 googleFonts.forEach(f => gg.appendChild(makeCard({
-  ...f, source: 'Google Fonts', license: 'קוד פתוח — חינם לשימוש מסחרי',
-  live: true, family: f.name,
+  ...f, source: 'Google Fonts', license: 'קוד פתוח — חינם לשימוש מסחרי', family: f.name,
 })));
-
-const og = $('other-grid');
-otherFonts.forEach(f => og.appendChild(makeCard({ ...f, license: f.license })));
 
 // Both headline counts are read back off the rendered cards rather than off the
 // source arrays, and are recomputed after the audit runs. A card that gets
@@ -220,14 +195,12 @@ function renderCounts() {
   const cards = sel => document.querySelectorAll(sel + ' .card').length;
 
   const liveTotal = live('#owned-grid') + live('#google-grid');
-  const downloadTotal = cards('#other-grid');
 
   $('gf-note').textContent =
     live('#google-grid') + ' מתוך ' + cards('#google-grid') +
     ' משפחות עם תמיכת עברית מאומתת מול css2 API מוצגות בתצוגה חיה.';
   $('subtitle').textContent =
-    liveTotal + ' פונטים עם תצוגה חיה · ' +
-    downloadTotal + ' להורדה · מעודכן יולי 2026';
+    liveTotal + ' פונטים עם תצוגה חיה · מעודכן יולי 2026';
 }
 
 renderCounts();
