@@ -77,17 +77,11 @@
 <p class="section-note" id="gf-note"></p>
 <div class="grid" id="google-grid"></div>
 
-<h2 class="section-title">AlefAlefAlef — הורדה בלבד</h2>
-<p class="section-note">מופצים כקובץ OTF/ZIP דרך טופס באתר. אין webfont/CDN, ולכן אין תצוגה מקדימה כאן.</p>
-<div class="grid" id="aaa-grid"></div>
-
 <h2 class="section-title">מקורות נוספים — הורדה בלבד</h2>
 <p class="section-note">Culmus ואחרים. מופצים כקבצים להתקנה מקומית.</p>
 <div class="grid" id="other-grid"></div>
 
 <script>
-const AAA_HUB = "https://alefalefalef.co.il/resources/%D7%A4%D7%95%D7%A0%D7%98%D7%99%D7%9D-%D7%91%D7%97%D7%99%D7%A0%D7%9D/";
-
 // Google Fonts — every family below verified against the css2 API as serving a
 // real Hebrew subset (July 2026). Families without a Hebrew subset are excluded.
 const googleFonts = [
@@ -155,22 +149,6 @@ const googleFonts = [
   {name:"Varela Round", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
 ];
 
-// Download-only. No webfont source exists, so these render no preview by design.
-const aaaFonts = [
-  {name:"Gadi Almog", he:"גדי אלמוג", cat:"sans", style:"סנס-סריף"},
-  {name:"Maarvon", he:"מערבון", cat:"serif display", style:"סריף, רטרו מערבון"},
-  {name:"Noa Shalev", he:"נעה שלו", cat:"serif hand", style:"קליגרפי, ספרדי"},
-  {name:"Dana Yad", he:"דנה־יד", cat:"hand", style:"כתב יד, קליל וחינני"},
-  {name:"Hug", he:"חיבוק", cat:"display", style:"איורי, שובב"},
-  {name:"Cheshbon", he:"חשבון", cat:"display", style:"גראנג׳, קבלות"},
-  {name:"Yarden", he:"ירדן", cat:"hand display", style:"מצויר ביד, לא פורמלי"},
-  {name:"Arkhai", he:"ארכאי", cat:"display", style:"גיאומטרי, עתיק"},
-  {name:"Braille", he:"ברייל", cat:"display", style:"ברייל תלת־לשוני"},
-  {name:"Monumentim", he:"מונומנטים", cat:"display", style:"דיספליי, מונומנטלי"},
-  {name:"Untitled Iconim", he:"אנטייטלד אייקונים", cat:"display", style:"סט אייקונים"},
-  {name:"Sigalit", he:"סיגלית", cat:"display", style:"דיספליי"},
-];
-
 const otherFonts = [
   {name:"Frank Ruehl CLM", cat:"serif", style:"סריף, קלאסי", source:"Culmus", license:"GPL 2.0", url:"https://culmus.sourceforge.io/"},
   {name:"Nachlieli CLM", cat:"sans", style:"סנס-סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
@@ -229,11 +207,6 @@ googleFonts.forEach(f => gg.appendChild(makeCard({
   live: true, family: f.name,
 })));
 
-const ag = $('aaa-grid');
-aaaFonts.forEach(f => ag.appendChild(makeCard({
-  ...f, source: 'AlefAlefAlef', license: 'חינם — בדוק רישיון בעמוד הפונט', url: AAA_HUB,
-})));
-
 const og = $('other-grid');
 otherFonts.forEach(f => og.appendChild(makeCard({ ...f, license: f.license })));
 
@@ -247,7 +220,7 @@ function renderCounts() {
   const cards = sel => document.querySelectorAll(sel + ' .card').length;
 
   const liveTotal = live('#owned-grid') + live('#google-grid');
-  const downloadTotal = cards('#aaa-grid') + cards('#other-grid');
+  const downloadTotal = cards('#other-grid');
 
   $('gf-note').textContent =
     live('#google-grid') + ' מתוך ' + cards('#google-grid') +
