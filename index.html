@@ -6,176 +6,311 @@
 <title>קטלוג פונטים עבריים - Digitizer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@300;400;700&family=Assistant:wght@300;400;700&family=Varela+Round&family=Secular+One&family=Alef:wght@400;700&family=Frank+Ruhl+Libre:wght@300;400;700&family=David+Libre:wght@400;700&family=Suez+One&family=Noto+Sans+Hebrew:wght@300;400;700&family=Noto+Serif+Hebrew:wght@300;400;700&family=Karantina:wght@300;400;700&family=Amatic+SC:wght@400;700&family=Bellefair&family=Miriam+Libre:wght@400;700&family=Tinos:wght@400;700&family=Cousine:wght@400;700&family=Arimo:wght@400;700&family=Ploni:wght@300;400;700&family=Rubik+Mono+One&family=IBM+Plex+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alef&family=Amatic+SC&family=Arimo:wght@400;700&family=Assistant:wght@200;400;700;800&family=Bellefair&family=Bona+Nova&family=Bona+Nova+SC&family=Cardo&family=Cascadia+Code:wght@200;400;700&family=Cascadia+Mono:wght@200;400;700&family=Cousine&family=David+Libre&family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Fredoka:wght@300;400;700&family=Google+Sans:wght@400;700&family=Gveret+Levin&family=Handjet:wght@100;400;700;900&family=Heebo:wght@100;400;700;900&family=IBM+Plex+Sans+Hebrew&family=Karantina&family=Libertinus+Serif&family=Lunasima&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Miriam+Libre:wght@400;700&family=Noto+Rashi+Hebrew:wght@100;400;700;900&family=Noto+Sans+Hebrew:wght@100;400;700;900&family=Noto+Serif+Hebrew:wght@100;400;700;900&family=Open+Sans:wght@300;400;700;800&family=Playpen+Sans+Hebrew:wght@100;400;700;800&family=Rubik:wght@300;400;700;900&family=Rubik+80s+Fade&family=Rubik+Beastly&family=Rubik+Broken+Fax&family=Rubik+Bubbles&family=Rubik+Burned&family=Rubik+Dirt&family=Rubik+Distressed&family=Rubik+Doodle+Shadow&family=Rubik+Doodle+Triangles&family=Rubik+Gemstones&family=Rubik+Glitch&family=Rubik+Glitch+Pop&family=Rubik+Iso&family=Rubik+Lines&family=Rubik+Maps&family=Rubik+Marker+Hatch&family=Rubik+Maze&family=Rubik+Microbe&family=Rubik+Moonrocks&family=Rubik+Pixels&family=Rubik+Puddles&family=Rubik+Scribble&family=Rubik+Spray+Paint&family=Rubik+Storm&family=Rubik+Vinyl&family=Rubik+Wet+Paint&family=Secular+One&family=Solitreo&family=Suez+One&family=Tinos&family=Varela+Round&display=swap" rel="stylesheet">
 <style>
-  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 300; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Light.woff2') format('woff2'); }
-  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 500; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Medium.woff2') format('woff2'); }
-  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 700; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Bold.woff2') format('woff2'); }
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 300; font-display: swap; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Light.woff2') format('woff2'); }
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 500; font-display: swap; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Medium.woff2') format('woff2'); }
+  @font-face { font-family: 'GreycliffHebrewCF'; font-weight: 700; font-display: swap; src: url('https://cdn.digitizer.co.il/wp-content/uploads/elementor/fonts/GreycliffHebrewCF-Bold.woff2') format('woff2'); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0a0a0b; color: #e5e5e5; font-family: 'Heebo', sans-serif; padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
   h1 { font-family: 'GreycliffHebrewCF', sans-serif; font-size: 42px; font-weight: 700; margin-bottom: 10px; color: #4cd7f6; }
-  .subtitle { color: #888; font-size: 16px; margin-bottom: 40px; }
+  .subtitle { color: #888; font-size: 16px; margin-bottom: 12px; }
+  .note { color: #6d6d75; font-size: 13px; line-height: 1.7; margin-bottom: 32px; border-inline-start: 2px solid #2a2a30; padding-inline-start: 12px; }
   .categories { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
   .cat-btn { background: #1a1a1e; border: 1px solid #333; color: #aaa; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-family: 'Heebo', sans-serif; transition: all 0.2s; }
   .cat-btn:hover, .cat-btn.active { background: #4cd7f6; color: #000; border-color: #4cd7f6; }
-  .section-title { font-size: 24px; font-weight: 700; color: #4cd7f6; margin: 40px 0 20px; padding-bottom: 10px; border-bottom: 1px solid #222; }
+  .section-title { font-size: 24px; font-weight: 700; color: #4cd7f6; margin: 40px 0 8px; padding-bottom: 10px; border-bottom: 1px solid #222; }
+  .section-note { font-size: 13px; color: #777; margin-bottom: 20px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
   .card { background: #141416; border: 1px solid #222; border-radius: 12px; padding: 24px; transition: border-color 0.3s; }
   .card:hover { border-color: #4cd7f6; }
-  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
   .font-name { font-size: 16px; font-weight: 700; color: #fff; }
   .font-meta { font-size: 12px; color: #666; }
-  .font-style { font-size: 11px; color: #4cd7f6; background: #4cd7f615; padding: 3px 8px; border-radius: 8px; }
-  .font-source { font-size: 11px; color: #888; background: #ffffff08; padding: 3px 8px; border-radius: 8px; }
+  .font-source { font-size: 11px; color: #888; background: #ffffff08; padding: 3px 8px; border-radius: 8px; white-space: nowrap; }
   .preview { margin: 12px 0; line-height: 1.6; }
   .preview-lg { font-size: 32px; color: #fff; margin-bottom: 8px; }
   .preview-md { font-size: 18px; color: #ccc; margin-bottom: 4px; }
   .preview-sm { font-size: 14px; color: #999; }
   .license { font-size: 11px; color: #555; margin-top: 12px; }
+  .no-preview { background: #0e0e10; border: 1px dashed #33333a; border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .no-preview-title { font-size: 13px; color: #8a8a93; margin-bottom: 6px; }
+  .no-preview-why { font-size: 12px; color: #5c5c65; line-height: 1.6; }
+  .dl { display: inline-block; margin-top: 10px; font-size: 12px; color: #4cd7f6; text-decoration: none; border-bottom: 1px solid #4cd7f640; }
+  .dl:hover { border-bottom-color: #4cd7f6; }
   .search { width: 100%; padding: 12px 20px; background: #141416; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 16px; font-family: 'Heebo', sans-serif; margin-bottom: 20px; }
   .search:focus { outline: none; border-color: #4cd7f6; }
   .search::placeholder { color: #555; }
   .hidden { display: none !important; }
+  .empty { color: #666; font-size: 14px; padding: 20px 0; }
   @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 28px; } }
 </style>
 </head>
 <body>
 
 <h1>קטלוג פונטים עבריים</h1>
-<p class="subtitle">37 פונטים חינמיים + פונטים בבעלות Digitizer | מעודכן מרץ 2026</p>
+<p class="subtitle" id="subtitle">מעודכן יולי 2026</p>
+<p class="note">
+  תצוגה מקדימה חיה מוצגת רק לפונטים שנטענים כ־webfont (Google Fonts + פונטים בבעלותנו).
+  פונטים שמופצים כהורדת קובץ בלבד מסומנים במפורש ומקושרים לעמוד ההורדה — לא מוצגת עבורם תצוגה מזויפת.
+</p>
 
-<input type="text" class="search" placeholder="חיפוש פונט..." oninput="filterFonts(this.value)">
+<input type="text" class="search" placeholder="חיפוש פונט..." oninput="setQuery(this.value)">
 
-<div class="categories">
-  <button class="cat-btn active" onclick="filterCat('all')">הכל</button>
-  <button class="cat-btn" onclick="filterCat('sans')">סנס-סריף</button>
-  <button class="cat-btn" onclick="filterCat('serif')">סריף</button>
-  <button class="cat-btn" onclick="filterCat('display')">דיספליי</button>
-  <button class="cat-btn" onclick="filterCat('hand')">כתב יד</button>
-  <button class="cat-btn" onclick="filterCat('mono')">מונוספייס</button>
-  <button class="cat-btn" onclick="filterCat('owned')">בבעלותנו</button>
+<div class="categories" id="cats">
+  <button class="cat-btn active" data-cat="all">הכל</button>
+  <button class="cat-btn" data-cat="sans">סנס-סריף</button>
+  <button class="cat-btn" data-cat="serif">סריף</button>
+  <button class="cat-btn" data-cat="display">דיספליי</button>
+  <button class="cat-btn" data-cat="hand">כתב יד</button>
+  <button class="cat-btn" data-cat="mono">מונוספייס</button>
+  <button class="cat-btn" data-cat="owned">בבעלותנו</button>
+  <button class="cat-btn" data-cat="livepreview">עם תצוגה חיה</button>
 </div>
 
 <h2 class="section-title">בבעלות Digitizer</h2>
-<div class="grid">
-  <div class="card" data-cat="owned sans" data-name="GreycliffHebrewCF">
-    <div class="card-header">
-      <span class="font-name">GreycliffHebrewCF</span>
-      <span class="font-source">Digitizer</span>
-    </div>
-    <div class="preview">
-      <div class="preview-lg" style="font-family:'GreycliffHebrewCF'">דיגיטייזר - שותף טכני לצמיחה</div>
-      <div class="preview-md" style="font-family:'GreycliffHebrewCF'; font-weight:300">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
-      <div class="preview-sm" style="font-family:'GreycliffHebrewCF'">Light 300 | Medium 500 | Bold 700</div>
-    </div>
-    <div class="license">Commercial - Digitizer owned | woff + woff2</div>
-  </div>
-</div>
+<p class="section-note">נטען מ־cdn.digitizer.co.il</p>
+<div class="grid" id="owned-grid"></div>
 
-<h2 class="section-title">Google Fonts (חינם, SIL OFL)</h2>
+<h2 class="section-title">Google Fonts</h2>
+<p class="section-note" id="gf-note"></p>
 <div class="grid" id="google-grid"></div>
 
-<h2 class="section-title">AlefAlefAlef (חינם)</h2>
+<h2 class="section-title">AlefAlefAlef — הורדה בלבד</h2>
+<p class="section-note">מופצים כקובץ OTF/ZIP דרך טופס באתר. אין webfont/CDN, ולכן אין תצוגה מקדימה כאן.</p>
 <div class="grid" id="aaa-grid"></div>
 
-<h2 class="section-title">מקורות נוספים</h2>
+<h2 class="section-title">מקורות נוספים — הורדה בלבד</h2>
+<p class="section-note">Culmus ואחרים. מופצים כקבצים להתקנה מקומית.</p>
 <div class="grid" id="other-grid"></div>
 
 <script>
+const AAA_HUB = "https://alefalefalef.co.il/resources/%D7%A4%D7%95%D7%A0%D7%98%D7%99%D7%9D-%D7%91%D7%97%D7%99%D7%A0%D7%9D/";
+
+// Google Fonts — every family below verified against the css2 API as serving a
+// real Hebrew subset (July 2026). Families without a Hebrew subset are excluded.
 const googleFonts = [
-  {name:"Heebo", family:"'Heebo'", cat:"sans", style:"סנס-סריף, מודרני", weights:"100-900"},
-  {name:"Rubik", family:"'Rubik'", cat:"sans", style:"סנס-סריף, מעוגל", weights:"300-900"},
-  {name:"Assistant", family:"'Assistant'", cat:"sans", style:"סנס-סריף, נקי", weights:"200-800"},
-  {name:"Varela Round", family:"'Varela Round'", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
-  {name:"Secular One", family:"'Secular One'", cat:"display", style:"דיספליי, בולט", weights:"400"},
-  {name:"Alef", family:"'Alef'", cat:"sans", style:"סנס-סריף, מאוזן", weights:"400, 700"},
-  {name:"Frank Ruhl Libre", family:"'Frank Ruhl Libre'", cat:"serif", style:"סריף, עיתונאי", weights:"300-900"},
-  {name:"David Libre", family:"'David Libre'", cat:"serif", style:"סריף, קלאסי", weights:"400-700"},
-  {name:"Suez One", family:"'Suez One'", cat:"display serif", style:"סריף, דיספליי", weights:"400"},
-  {name:"Noto Sans Hebrew", family:"'Noto Sans Hebrew'", cat:"sans", style:"סנס-סריף, אוניברסלי", weights:"100-900"},
-  {name:"Noto Serif Hebrew", family:"'Noto Serif Hebrew'", cat:"serif", style:"סריף, אוניברסלי", weights:"100-900"},
-  {name:"Karantina", family:"'Karantina'", cat:"display", style:"דיספליי, שובב", weights:"300-700"},
-  {name:"Amatic SC", family:"'Amatic SC'", cat:"hand display", style:"כתב יד, קז'ואל", weights:"400, 700"},
-  {name:"Bellefair", family:"'Bellefair'", cat:"serif", style:"סריף, אלגנטי", weights:"400"},
-  {name:"Miriam Libre", family:"'Miriam Libre'", cat:"sans", style:"סנס-סריף, ניטרלי", weights:"400, 700"},
-  {name:"Tinos", family:"'Tinos'", cat:"serif", style:"סריף, דמוי Times", weights:"400, 700"},
-  {name:"Cousine", family:"'Cousine'", cat:"mono", style:"מונוספייס", weights:"400, 700"},
-  {name:"Arimo", family:"'Arimo'", cat:"sans", style:"סנס-סריף, דמוי Arial", weights:"400-700"},
-  {name:"Ploni", family:"'Ploni'", cat:"sans", style:"סנס-סריף, מודרני", weights:"100-900"},
-  {name:"Rubik Mono One", family:"'Rubik Mono One'", cat:"display", style:"דיספליי, כבד", weights:"400"},
-  {name:"IBM Plex Sans Hebrew", family:"'IBM Plex Sans Hebrew'", cat:"sans", style:"סנס-סריף, תאגידי", weights:"300-700"},
+  {name:"Alef", cat:"sans", style:"סנס-סריף, מאוזן", weights:"400"},
+  {name:"Amatic SC", cat:"hand display", style:"כתב יד, קזואל", weights:"400"},
+  {name:"Arimo", cat:"sans", style:"סנס-סריף, דמוי Arial", weights:"400-700"},
+  {name:"Assistant", cat:"sans", style:"סנס-סריף, נקי", weights:"200-800"},
+  {name:"Bellefair", cat:"serif", style:"סריף, אלגנטי", weights:"400"},
+  {name:"Bona Nova", cat:"serif", style:"סריף, פולני קלאסי", weights:"400"},
+  {name:"Bona Nova SC", cat:"serif", style:"סריף, ספיטל־קפס", weights:"400"},
+  {name:"Cardo", cat:"serif", style:"סריף, אקדמי", weights:"400"},
+  {name:"Cascadia Code", cat:"mono", style:"מונוספייס, ליגטורות", weights:"200-700"},
+  {name:"Cascadia Mono", cat:"mono", style:"מונוספייס, מפתחים", weights:"200-700"},
+  {name:"Cousine", cat:"mono", style:"מונוספייס, דמוי Courier", weights:"400"},
+  {name:"David Libre", cat:"serif", style:"סריף, קלאסי", weights:"400"},
+  {name:"Frank Ruhl Libre", cat:"serif", style:"סריף, עיתונאי", weights:"300-900"},
+  {name:"Fredoka", cat:"sans display", style:"סנס-סריף, מעוגל ושמח", weights:"300-700"},
+  {name:"Google Sans", cat:"sans", style:"סנס-סריף, מותג Google", weights:"400-700"},
+  {name:"Gveret Levin", cat:"hand", style:"כתב יד, פופולרי מאוד", weights:"400"},
+  {name:"Handjet", cat:"display", style:"דיספליי, פיקסלים מודולרי", weights:"100-900"},
+  {name:"Heebo", cat:"sans", style:"סנס-סריף, מודרני", weights:"100-900"},
+  {name:"IBM Plex Sans Hebrew", cat:"sans", style:"סנס-סריף, תאגידי", weights:"400"},
+  {name:"Karantina", cat:"display", style:"דיספליי, שובב", weights:"400"},
+  {name:"Libertinus Serif", cat:"serif", style:"סריף, אקדמי־מתמטי", weights:"400"},
+  {name:"Lunasima", cat:"sans", style:"סנס-סריף, קומפקטי", weights:"400"},
+  {name:"M PLUS 1p", cat:"sans", style:"סנס-סריף, רב־לשוני", weights:"400"},
+  {name:"M PLUS Rounded 1c", cat:"sans", style:"סנס-סריף, מעוגל", weights:"400"},
+  {name:"Miriam Libre", cat:"sans", style:"סנס-סריף, ניטרלי", weights:"400-700"},
+  {name:"Noto Rashi Hebrew", cat:"serif", style:"כתב רש״י", weights:"100-900"},
+  {name:"Noto Sans Hebrew", cat:"sans", style:"סנס-סריף, אוניברסלי", weights:"100-900"},
+  {name:"Noto Serif Hebrew", cat:"serif", style:"סריף, אוניברסלי", weights:"100-900"},
+  {name:"Open Sans", cat:"sans", style:"סנס-סריף, ותיק ובטוח", weights:"300-800"},
+  {name:"Playpen Sans Hebrew", cat:"hand", style:"כתב יד, ילדותי", weights:"100-800"},
+  {name:"Rubik", cat:"sans", style:"סנס-סריף, מעוגל", weights:"300-900"},
+  {name:"Rubik 80s Fade", cat:"display", style:"דיספליי, דהייה", weights:"400"},
+  {name:"Rubik Beastly", cat:"display", style:"דיספליי, מפלצתי", weights:"400"},
+  {name:"Rubik Broken Fax", cat:"display", style:"דיספליי, פקס שבור", weights:"400"},
+  {name:"Rubik Bubbles", cat:"display", style:"דיספליי, בועות", weights:"400"},
+  {name:"Rubik Burned", cat:"display", style:"דיספליי, שרוף", weights:"400"},
+  {name:"Rubik Dirt", cat:"display", style:"דיספליי, לכלוך", weights:"400"},
+  {name:"Rubik Distressed", cat:"display", style:"דיספליי, שחוק", weights:"400"},
+  {name:"Rubik Doodle Shadow", cat:"display", style:"דיספליי, שרבוט מוצל", weights:"400"},
+  {name:"Rubik Doodle Triangles", cat:"display", style:"דיספליי, שרבוט משולשים", weights:"400"},
+  {name:"Rubik Gemstones", cat:"display", style:"דיספליי, אבני חן", weights:"400"},
+  {name:"Rubik Glitch", cat:"display", style:"דיספליי, גליץ׳", weights:"400"},
+  {name:"Rubik Glitch Pop", cat:"display", style:"דיספליי, גליץ׳ פופ", weights:"400"},
+  {name:"Rubik Iso", cat:"display", style:"דיספליי, איזומטרי", weights:"400"},
+  {name:"Rubik Lines", cat:"display", style:"דיספליי, קווים", weights:"400"},
+  {name:"Rubik Maps", cat:"display", style:"דיספליי, מפות", weights:"400"},
+  {name:"Rubik Marker Hatch", cat:"display", style:"דיספליי, טוש מקווקו", weights:"400"},
+  {name:"Rubik Maze", cat:"display", style:"דיספליי, מבוך", weights:"400"},
+  {name:"Rubik Microbe", cat:"display", style:"דיספליי, חיידקים", weights:"400"},
+  {name:"Rubik Moonrocks", cat:"display", style:"דיספליי, סלעי ירח", weights:"400"},
+  {name:"Rubik Pixels", cat:"display", style:"דיספליי, פיקסלים", weights:"400"},
+  {name:"Rubik Puddles", cat:"display", style:"דיספליי, שלוליות", weights:"400"},
+  {name:"Rubik Scribble", cat:"display", style:"דיספליי, שרבוט", weights:"400"},
+  {name:"Rubik Spray Paint", cat:"display", style:"דיספליי, ספריי", weights:"400"},
+  {name:"Rubik Storm", cat:"display", style:"דיספליי, סערה", weights:"400"},
+  {name:"Rubik Vinyl", cat:"display", style:"דיספליי, ויניל", weights:"400"},
+  {name:"Rubik Wet Paint", cat:"display", style:"דיספליי, צבע רטוב", weights:"400"},
+  {name:"Secular One", cat:"display", style:"דיספליי, בולט", weights:"400"},
+  {name:"Solitreo", cat:"hand", style:"כתב יד, סולתריאו ספרדי", weights:"400"},
+  {name:"Suez One", cat:"display serif", style:"סריף, דיספליי כבד", weights:"400"},
+  {name:"Tinos", cat:"serif", style:"סריף, דמוי Times", weights:"400"},
+  {name:"Varela Round", cat:"sans", style:"סנס-סריף, ידידותי", weights:"400"},
 ];
 
+// Download-only. No webfont source exists, so these render no preview by design.
 const aaaFonts = [
-  {name:"Dana Yad", cat:"hand", style:"כתב יד, קליל וחינני"},
-  {name:"Gveret Levin", cat:"hand", style:"כתב יד, פופולרי מאוד"},
-  {name:"Maaravon", cat:"serif display", style:"סריף, רטרו מערבון"},
-  {name:"Noa Shalev", cat:"serif hand", style:"קליגרפי, ספרדי"},
-  {name:"Hug", cat:"display", style:"איורי, שובב"},
-  {name:"Heshbon", cat:"display", style:"גראנג', קבלות"},
-  {name:"Yarden", cat:"hand display", style:"מצויר ביד, לא פורמלי"},
-  {name:"Archai", cat:"display", style:"גיאומטרי, עתיק"},
+  {name:"Gadi Almog", he:"גדי אלמוג", cat:"sans", style:"סנס-סריף"},
+  {name:"Maarvon", he:"מערבון", cat:"serif display", style:"סריף, רטרו מערבון"},
+  {name:"Noa Shalev", he:"נעה שלו", cat:"serif hand", style:"קליגרפי, ספרדי"},
+  {name:"Dana Yad", he:"דנה־יד", cat:"hand", style:"כתב יד, קליל וחינני"},
+  {name:"Hug", he:"חיבוק", cat:"display", style:"איורי, שובב"},
+  {name:"Cheshbon", he:"חשבון", cat:"display", style:"גראנג׳, קבלות"},
+  {name:"Yarden", he:"ירדן", cat:"hand display", style:"מצויר ביד, לא פורמלי"},
+  {name:"Arkhai", he:"ארכאי", cat:"display", style:"גיאומטרי, עתיק"},
+  {name:"Braille", he:"ברייל", cat:"display", style:"ברייל תלת־לשוני"},
+  {name:"Monumentim", he:"מונומנטים", cat:"display", style:"דיספליי, מונומנטלי"},
+  {name:"Untitled Iconim", he:"אנטייטלד אייקונים", cat:"display", style:"סט אייקונים"},
+  {name:"Sigalit", he:"סיגלית", cat:"display", style:"דיספליי"},
 ];
 
 const otherFonts = [
-  {name:"Frank Ruehl CLM", family:"serif", cat:"serif", style:"סריף, קלאסי", source:"Culmus Project", license:"GPL 2.0"},
-  {name:"Nachlieli CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף", source:"Culmus Project", license:"GPL+FE"},
-  {name:"David CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף", source:"Culmus Project", license:"GPL+FE"},
-  {name:"Hadasim CLM", family:"serif", cat:"serif", style:"סריף", source:"Culmus Project", license:"GPL+FE"},
-  {name:"Simple CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף, מינימלי", source:"Culmus Project", license:"GPL+FE"},
-  {name:"Ellinia CLM", family:"sans-serif", cat:"sans", style:"סנס-סריף, דק", source:"Culmus Project", license:"GPL+FE"},
-  {name:"Aharoni CLM", family:"sans-serif", cat:"sans display", style:"סנס-סריף, בולד", source:"Culmus Project", license:"GPL+FE"},
-  {name:"Almoni", family:"sans-serif", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"Free"},
+  {name:"Frank Ruehl CLM", cat:"serif", style:"סריף, קלאסי", source:"Culmus", license:"GPL 2.0", url:"https://culmus.sourceforge.io/"},
+  {name:"Nachlieli CLM", cat:"sans", style:"סנס-סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"David CLM", cat:"serif", style:"סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"Hadasim CLM", cat:"serif", style:"סריף", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"Simple CLM", cat:"sans", style:"סנס-סריף, מינימלי", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"Ellinia CLM", cat:"sans", style:"סנס-סריף, דק", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"Aharoni CLM", cat:"sans display", style:"סנס-סריף, בולד", source:"Culmus", license:"GPL+FE", url:"https://culmus.sourceforge.io/"},
+  {name:"Almoni", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"בדוק רישיון", url:"https://hagilda.com/"},
+  {name:"Ploni", cat:"sans", style:"סנס-סריף, מודרני", source:"Hagilda", license:"מסחרי — אינו ב־Google Fonts", url:"https://hagilda.com/"},
 ];
 
-function renderCard(font, container, isGoogle=false) {
-  const family = font.family || `'${font.name}'`;
-  const fontStyle = isGoogle ? `font-family:${family}` : `font-family:${font.family || 'sans-serif'}`;
-  const source = isGoogle ? "Google Fonts" : (font.source || "AlefAlefAlef");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function makeCard({name, he, cat, style, weights, source, license, live, family, url}) {
   const card = document.createElement('div');
   card.className = 'card';
-  card.dataset.cat = font.cat;
-  card.dataset.name = font.name.toLowerCase();
+  card.dataset.cat = cat + (live ? ' livepreview' : '');
+  card.dataset.name = (name + ' ' + (he || '')).toLowerCase();
+  if (live) card.dataset.family = family;
+
+  const title = he ? `${esc(name)} <span class="font-meta">/ ${esc(he)}</span>` : esc(name);
+  const body = live
+    ? `<div class="preview">
+         <div class="preview-lg" style="font-family:'${family}'">שלום עולם, דיגיטייזר</div>
+         <div class="preview-md" style="font-family:'${family}'">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
+         <div class="preview-sm">${esc(style)}${weights ? ' | ' + esc(weights) : ''}</div>
+       </div>`
+    : `<div class="no-preview">
+         <div class="no-preview-title">${esc(style)}</div>
+         <div class="no-preview-why">תצוגה מקדימה לא זמינה — הפונט מופץ כקובץ להורדה ולא כ־webfont.</div>
+         <a class="dl" href="${esc(url)}" target="_blank" rel="noopener">לעמוד ההורדה ↗</a>
+       </div>`;
+
   card.innerHTML = `
     <div class="card-header">
-      <span class="font-name">${font.name}</span>
-      <span class="font-source">${source}</span>
+      <span class="font-name">${title}</span>
+      <span class="font-source">${esc(source)}</span>
     </div>
-    <div class="preview">
-      <div class="preview-lg" style="${fontStyle}">שלום עולם, דיגיטייזר</div>
-      <div class="preview-md" style="${fontStyle}">אבגדהוזחטי כלמנסעפצקרשת 0123456789</div>
-      <div class="preview-sm">${font.style} ${font.weights ? '| ' + font.weights : ''}</div>
-    </div>
-    <div class="license">${font.license || (isGoogle ? 'SIL OFL - חינם לשימוש מסחרי' : 'חינם - בדוק רשיון')}</div>
-  `;
-  container.appendChild(card);
+    ${body}
+    <div class="license">${esc(license)}</div>`;
+  return card;
 }
 
-const gg = document.getElementById('google-grid');
-googleFonts.forEach(f => renderCard(f, gg, true));
+const $ = id => document.getElementById(id);
 
-const ag = document.getElementById('aaa-grid');
-aaaFonts.forEach(f => renderCard(f, ag));
+$('owned-grid').appendChild(makeCard({
+  name: 'GreycliffHebrewCF', cat: 'owned sans', style: 'סנס-סריף, מותג Digitizer',
+  weights: '300 / 500 / 700', source: 'Digitizer', license: 'Commercial — Digitizer owned | woff2',
+  live: true, family: 'GreycliffHebrewCF',
+}));
 
-const og = document.getElementById('other-grid');
-otherFonts.forEach(f => renderCard(f, og));
+const gg = $('google-grid');
+googleFonts.forEach(f => gg.appendChild(makeCard({
+  ...f, source: 'Google Fonts', license: 'קוד פתוח — חינם לשימוש מסחרי',
+  live: true, family: f.name,
+})));
 
-function filterFonts(q) {
-  q = q.toLowerCase();
+const ag = $('aaa-grid');
+aaaFonts.forEach(f => ag.appendChild(makeCard({
+  ...f, source: 'AlefAlefAlef', license: 'חינם — בדוק רישיון בעמוד הפונט', url: AAA_HUB,
+})));
+
+const og = $('other-grid');
+otherFonts.forEach(f => og.appendChild(makeCard({ ...f, license: f.license })));
+
+$('gf-note').textContent =
+  googleFonts.length + ' משפחות עם תמיכת עברית מאומתת מול css2 API. תצוגה חיה.';
+$('subtitle').textContent =
+  (1 + googleFonts.length) + ' פונטים עם תצוגה חיה · ' +
+  (aaaFonts.length + otherFonts.length) + ' להורדה · מעודכן יולי 2026';
+
+// Defence in depth: if a webfont fails to load, downgrade the card to the honest
+// "no preview" state instead of silently showing a fallback face.
+//
+// document.fonts.check() is not usable here: per spec it returns true for a
+// family that has no @font-face at all (unknown families are ignored), which is
+// exactly the failure we need to catch. So compare rendered metrics instead.
+// Two base faces are tested because some families here are deliberately metric
+// compatible with a system font — Cousine with Courier, Tinos with Times — and
+// would look "unloaded" against that one base alone.
+function fontRenders(family) {
+  const probe = document.createElement('span');
+  probe.textContent = 'שלום עולם אבגדהוזחט 0123456789';
+  probe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;font-size:72px;white-space:nowrap;';
+  document.body.appendChild(probe);
+  try {
+    for (const base of ['monospace', 'serif']) {
+      probe.style.fontFamily = base;
+      const w = probe.offsetWidth, h = probe.offsetHeight;
+      probe.style.fontFamily = `"${family}",${base}`;
+      if (probe.offsetWidth !== w || probe.offsetHeight !== h) return true;
+    }
+    return false;
+  } finally {
+    probe.remove();
+  }
+}
+
+function auditPreviews() {
+  document.querySelectorAll('.card[data-family]').forEach(card => {
+    const fam = card.dataset.family;
+    if (fontRenders(fam)) return;
+    card.dataset.cat = card.dataset.cat.replace(' livepreview', '');
+    const p = card.querySelector('.preview');
+    if (!p) return;
+    p.outerHTML = `<div class="no-preview">
+        <div class="no-preview-title">${esc(fam)}</div>
+        <div class="no-preview-why">הפונט לא נטען בדפדפן הזה — לא מוצגת תצוגה מקדימה כדי לא להטעות.</div>
+      </div>`;
+  });
+  applyFilters();
+}
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(auditPreviews);
+} else {
+  window.addEventListener('load', auditPreviews);
+}
+
+let query = '', activeCat = 'all';
+
+function applyFilters() {
   document.querySelectorAll('.card').forEach(c => {
-    c.classList.toggle('hidden', !c.dataset.name.includes(q));
+    const matchQ = !query || c.dataset.name.includes(query);
+    const matchC = activeCat === 'all' || c.dataset.cat.split(' ').includes(activeCat);
+    c.classList.toggle('hidden', !(matchQ && matchC));
   });
 }
 
-function filterCat(cat) {
+function setQuery(v) { query = v.trim().toLowerCase(); applyFilters(); }
+
+$('cats').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-btn');
+  if (!btn) return;
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.card').forEach(c => {
-    if (cat === 'all') { c.classList.remove('hidden'); return; }
-    c.classList.toggle('hidden', !c.dataset.cat.includes(cat));
-  });
-}
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  applyFilters();
+});
 </script>
 </body>
 </html>
